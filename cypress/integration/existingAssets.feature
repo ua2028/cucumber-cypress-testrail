@@ -34,6 +34,8 @@ Scenario: C7 with no assets table should be empty
 # Scenario: search with capital letters
 # Scenario: search with lowercase letters
 # Scenario: search to narrow down and delete to see table fills again
+#  Scenario: Should be able to navigate to 'Description' page
+#  Scenario: Should be able to navigate to 'Add Asset' page
 
 # scenario: sort table by ascend on first results page should show ordered results by ascend
 # scenario: sort table by descend  on first results page should show ordered results by descend
