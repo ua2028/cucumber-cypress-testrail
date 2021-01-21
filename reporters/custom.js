@@ -84,8 +84,8 @@ class MyReporter {
                 let suiteTitle = titlePath[0];
                 let suiteScreenshotFolder = suiteTitle.split(" ")[0].toLowerCase() + suiteTitle.split(" ")[1]
                 let testCaseTitle = titlePath[1];
-                console.log("-----------------suiteTitle: ",suiteTitle);
-                console.log("-----------------testCaseTitle: ",testCaseTitle);
+                // console.log("-----------------suiteTitle: ",suiteTitle);
+                // console.log("-----------------testCaseTitle: ",testCaseTitle);
 
                 let caseId = testCaseTitle.split(" ")[0].replace( /^\D+/g, '');
 
@@ -118,15 +118,15 @@ class MyReporter {
             })
             .once(EVENT_RUN_END, () => {
                 let gotCases = Object.keys(resultsObj);
-                console.log("**************************************** ",gotCases);
+                // console.log("**************************************** ",gotCases);
                 if (process.env.TESTRAIL){
                     testrail.getCases(1, { suite_id: 1}, function (err, getCasesResponse, cases) {
                         // console.log(cases);
                         let caseIds = cases.map(x => x.id);
                         let dateStr = moment().format('MMM Do YYYY, HH:mm (Z)');
                         let casesFoundInTests = Object.keys(resultsObj);
-                        console.log("casesFoundInTests.length: ",casesFoundInTests.length);
-                        console.log("caseIds.length: ",caseIds.length);
+                        // console.log("casesFoundInTests.length: ",casesFoundInTests.length);
+                        // console.log("caseIds.length: ",caseIds.length);
                         if (caseIds.length != casesFoundInTests.length){
                             console.log("did not collect all tests yet")
                             return
@@ -147,24 +147,24 @@ class MyReporter {
                             testrail.getTests(runId, {}, function (err, getTestsResponse, tests) {
                                 for (let i = 0; i < tests.length; i++){
                                     let test = tests[i];
-                                    console.log(`${test.case_id} getTests, test: `,test.case_id);
+                                    // console.log(`${test.case_id} getTests, test: `,test.case_id);
                                     // add results to run
                                     if (resultsObj[test.case_id]){
                                         if (! resultsObj[test.case_id]["uploaded"]){
-                                            console.log("got test case id in resultsObj that was not uploaded");
+                                            // console.log("got test case id in resultsObj that was not uploaded");
                                             testrail.addResult(test.id, resultsObj[test.case_id], async function (err, addResultResponse, addResultObject) {
-                                                console.log("add result response: ",addResultResponse.statusCode);
+                                                // console.log("add result response: ",addResultResponse.statusCode);
                                                 resultsObj[test.case_id]["uploaded"] = true;
                                                 // console.log(`added result to test id: ${test.id}`,addResultObject);
-                                                console.log(`added result to test id: ${test.id}`);
+                                                // console.log(`added result to test id: ${test.id}`);
                                                 // console.log("result from adding result to test run: ", addResultObject);
                                                 if (addResultObject.status_id==5){
                                                     let savedResult = resultsObj[test.case_id];
-                                                    console.log("test.case_id: ",test.case_id);
+                                                    // console.log("test.case_id: ",test.case_id);
                                                     // console.log("savedResult: ",savedResult);
                                                     if (savedResult){
                                                         let screenshotPath = resultsObj[test.case_id].screenshotPath;
-                                                        console.log("screenshotPath: ",screenshotPath);
+                                                        // console.log("screenshotPath: ",screenshotPath);
                                                         if (screenshotPath){
                                                             // upload screenshot, timeout for file save
                                                             await uploadAttachment(addResultObject.id, screenshotPath);
@@ -173,8 +173,8 @@ class MyReporter {
                                                 }
                                             });
                                         }else{
-                                            console.log("TEST WAS ALREADY UPLOADED: ",test.case_id);
-                                            console.log("resultsObj: ",resultsObj);
+                                            // console.log("TEST WAS ALREADY UPLOADED: ",test.case_id);
+                                            // console.log("resultsObj: ",resultsObj);
                                         }
                                     }
                                 }
